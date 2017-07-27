@@ -5,7 +5,9 @@
  */
 package ph.edu.dlsu.graphsearchdemo;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -104,6 +106,36 @@ public class UndirectedGraph {
         }
     }
 
+    public void iterativeBFS(String start) {
+        visited.clear();
+        if (!vertices.contains(start)) {
+            System.out.println("Node " + start + " not found.");
+            return;
+        }
+
+        Queue<String> queue = new ArrayDeque<>();
+        String current;
+        boolean hasAdjacentUnvisited;
+
+        queue.add(start);
+        while (!queue.isEmpty()) {
+            System.out.println("Queue: " + queue);
+            hasAdjacentUnvisited = false;
+            current = queue.remove();
+            if (!visited.contains(current)) {
+                visited.add(current);
+            }
+            System.out.println("Visited: " + visited);
+            for (String element : adjacency.get(vertices.indexOf(current))) {
+                if (!visited.contains(element)) {
+                    visited.add(element);
+                    queue.add(element);
+                }
+            }
+        }
+        System.out.println("The queue is finally empty!\n");
+    }
+
     public ArrayList<String> getVisitedNodes() {
         return visited;
     }
@@ -136,11 +168,16 @@ public class UndirectedGraph {
 
         graph.displayAdjacency();
 
+        // Testing Depth First Search
         graph.recursiveDFS("A");
         System.out.println("Recursive DFS Result: " + graph.getVisitedNodes());
 
         graph.iterativeDFS("A");
         System.out.println("Iterative DFS Result: " + graph.getVisitedNodes());
+
+        // Testing Breadth First Search
+        graph.iterativeBFS("A");
+        System.out.println("Iterative BFS Result: " + graph.getVisitedNodes());
     }
 
 }
